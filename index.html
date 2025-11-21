@@ -1,39 +1,186 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <title>2048</title>
-        <link rel="stylesheet" href="style.css">
-        <script src="app.js" charset="utf-8"></script>
-    </head>
-    <body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reach – AI Email Template Builder</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">HR</div>
+      <div>
+        <p class="eyebrow">Hostinger Reach</p>
+        <strong>AI Campaign Studio</strong>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="ghost">Save draft</button>
+      <button class="primary">Create campaign</button>
+    </div>
+  </header>
 
-        <div class="container">
-            <div class="info">
-                <hi>2048</hi>
-                <div class="score-container">
-                    <div class="score-title">score</div>
-                    <span id="score">0</span>
-                </div>
-            </div>
-            <span id="result"> <b>2048</b> tile!</span>
-        <div class="grid"></div>
-        <section class="guide clearfix ">
-            <h2> What is this? </h2>
-            <p> Although coded entirely from scratch, this game is a (lackluster) copy of Gabriele Cirulli's 2048, http://2048game.com/.
-            </p>
-        </section>
-        <section class="guide clearfix">
-         <h2> How do I play? </h2>
-         <p> Tiles with matching number values can be merged into a single tile, which receives the values' sum.
-         </p>
-         <p> To move the board, use the directional arrows - or swipe.</p>
-         <div class="guide_arrow-wrap">
-          <span class="guide_arrow"> &uHar; </span>
-          <span class="guide_arrow"> &lHar; </span>
-          <span class="guide_arrow"> &rHar; </span>
-          <span class="guide_arrow"> &dHar; </span>
-         </div>
+  <div class="workspace">
+    <aside class="sidebar" aria-label="Template presets">
+      <div class="sidebar-header">
+        <div>
+          <p class="eyebrow">Start with inspiration</p>
+          <h2>Pick a template</h2>
         </div>
-    </body>
+        <button class="ghost small" id="newChat">New chat</button>
+      </div>
+      <div id="templateList" class="template-list"></div>
+      <div class="helper-card">
+        <p class="eyebrow">Need an idea?</p>
+        <p class="muted">Try typing a goal and let Reach draft the email copy automatically.</p>
+      </div>
+    </aside>
+
+    <main class="composer">
+      <section class="panel prompt-panel" aria-labelledby="promptTitle">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">AI setup</p>
+            <h3 id="promptTitle">Describe your email</h3>
+            <p class="muted">Reach will turn your idea into a polished newsletter with editable sections.</p>
+          </div>
+          <div class="chips" id="personaChips"></div>
+        </div>
+        <form id="promptForm" class="prompt-form">
+          <textarea id="promptInput" name="prompt" rows="3" placeholder="Write a welcome note for new subscribers and share two helpful resources..." required></textarea>
+          <div class="prompt-actions">
+            <label class="field">
+              Audience
+              <select id="audienceSelect">
+                <option>New subscribers</option>
+                <option>Existing customers</option>
+                <option>Trial users</option>
+                <option>Partners</option>
+              </select>
+            </label>
+            <label class="field">
+              Tone
+              <select id="toneSelect">
+                <option>Friendly</option>
+                <option>Professional</option>
+                <option>Inspirational</option>
+                <option>Playful</option>
+              </select>
+            </label>
+            <button type="submit" class="primary">Generate with AI</button>
+          </div>
+        </form>
+        <div class="ai-feed" id="aiFeed" aria-live="polite"></div>
+      </section>
+
+      <section class="panel preview-panel" aria-labelledby="previewTitle">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Preview</p>
+            <h3 id="previewTitle">Welcome Newsletter Template</h3>
+          </div>
+          <div class="view-toggle">
+            <button id="chatTab" class="ghost small active">AI chat</button>
+            <button id="editTab" class="ghost small">Edit mode</button>
+          </div>
+        </div>
+
+        <div class="preview-grid">
+          <div class="email-wrapper">
+            <div class="email-canvas" id="emailCanvas">
+              <div class="email-header">
+                <div class="logo">Reach</div>
+                <p class="small">Your newsletter is ready to send</p>
+              </div>
+              <div class="hero" id="heroBlock">
+                <p class="eyebrow" id="eyebrowText">WELCOME TO THE COMMUNITY</p>
+                <h1 id="heroTitle">You're officially part of something amazing!</h1>
+                <p class="lead" id="heroSubtitle">Thank you for joining us. We built this starter email to help you share news, offers, and helpful resources.</p>
+                <div class="cta-row">
+                  <a class="btn" id="primaryCta" href="#">Get Started Now</a>
+                  <a class="ghost-link" id="secondaryCta" href="#">View account</a>
+                </div>
+                <img id="heroImage" src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1200&q=80" alt="Hero visual" />
+              </div>
+              <div class="content" id="contentBlock">
+                <h2 id="contentHeading">What to expect</h2>
+                <div class="pill-list" id="pillList"></div>
+                <div class="resources" id="resources"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="editor" id="editorPanel" hidden>
+            <div class="editor-section">
+              <h4>Typography</h4>
+              <label class="field">Heading font
+                <select id="headingFont">
+                  <option value="'Playfair Display', serif">Playfair Display</option>
+                  <option value="'Inter', sans-serif">Inter</option>
+                  <option value="'DM Sans', sans-serif">DM Sans</option>
+                  <option value="'Space Grotesk', sans-serif">Space Grotesk</option>
+                </select>
+              </label>
+              <label class="field">Body font
+                <select id="bodyFont">
+                  <option value="'Inter', sans-serif">Inter</option>
+                  <option value="'DM Sans', sans-serif">DM Sans</option>
+                  <option value="'Work Sans', sans-serif">Work Sans</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="editor-section">
+              <h4>Branding</h4>
+              <label class="field">Accent color
+                <input type="color" id="accentColor" value="#f36f4c" />
+              </label>
+              <label class="field">Background
+                <input type="color" id="backgroundColor" value="#fdf7f2" />
+              </label>
+              <label class="field">CTA color
+                <input type="color" id="ctaColor" value="#f36f4c" />
+              </label>
+            </div>
+
+            <div class="editor-section">
+              <h4>Hero content</h4>
+              <label class="field">Eyebrow text
+                <input type="text" id="eyebrowInput" value="WELCOME TO THE COMMUNITY" />
+              </label>
+              <label class="field">Headline
+                <input type="text" id="headlineInput" value="You're officially part of something amazing!" />
+              </label>
+              <label class="field">Subheadline
+                <textarea id="subheadlineInput" rows="3">Thank you for joining us. We built this starter email to help you share news, offers, and helpful resources.</textarea>
+              </label>
+              <label class="field">Primary CTA label
+                <input type="text" id="primaryCtaInput" value="Get Started Now" />
+              </label>
+              <label class="field">Hero image URL
+                <input type="url" id="heroImageInput" value="https://images.unsplash.com/photo-1556740749-887f6717d7e4?auto=format&fit=crop&w=1200&q=80" />
+              </label>
+            </div>
+
+            <div class="editor-section">
+              <h4>Resources</h4>
+              <label class="field">Section title
+                <input type="text" id="resourcesHeadingInput" value="What to expect" />
+              </label>
+              <label class="field">Pills (comma separated)
+                <input type="text" id="pillInput" value="Exclusive content, Product tips, Early access offers" />
+              </label>
+              <label class="field">Resource cards (title | link | tag per line)
+                <textarea id="resourceInput" rows="3">Beginner's Guide | # | Read more
+Top Tools | # | Explore</textarea>
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
 </html>
